@@ -1,6 +1,6 @@
 /**************************************************************************//**
- * @file     core_cm33.h
- * @brief    CMSIS Cortex-M33 Core Peripheral Access Layer Header File
+ * @file     core_armv8mml.h
+ * @brief    CMSIS Armv8-M Mainline Core Peripheral Access Layer Header File
  * @version  V5.2.3
  * @date     13. October 2021
  ******************************************************************************/
@@ -30,8 +30,8 @@
   #pragma GCC diagnostic ignored "-Wpedantic"   /* disable pedantic warning due to unnamed structs/unions */
 #endif
 
-#ifndef __CORE_CM33_H_GENERIC
-#define __CORE_CM33_H_GENERIC
+#ifndef __CORE_ARMV8MML_H_GENERIC
+#define __CORE_ARMV8MML_H_GENERIC
 
 #include <stdint.h>
 
@@ -58,25 +58,25 @@
  *                 CMSIS definitions
  ******************************************************************************/
 /**
-  \ingroup Cortex_M33
+  \ingroup Cortex_ARMv8MML
   @{
  */
 
 #include "cmsis_version.h"
 
-/*  CMSIS CM33 definitions */
-#define __CM33_CMSIS_VERSION_MAIN  (__CM_CMSIS_VERSION_MAIN)                   /*!< \deprecated [31:16] CMSIS HAL main version */
-#define __CM33_CMSIS_VERSION_SUB   (__CM_CMSIS_VERSION_SUB)                    /*!< \deprecated [15:0]  CMSIS HAL sub version */
-#define __CM33_CMSIS_VERSION       ((__CM33_CMSIS_VERSION_MAIN << 16U) | \
-                                     __CM33_CMSIS_VERSION_SUB           )      /*!< \deprecated CMSIS HAL version number */
+/*  CMSIS Armv8MML definitions */
+#define __ARMv8MML_CMSIS_VERSION_MAIN  (__CM_CMSIS_VERSION_MAIN)                   /*!< \deprecated [31:16] CMSIS HAL main version */
+#define __ARMv8MML_CMSIS_VERSION_SUB   (__CM_CMSIS_VERSION_SUB)                    /*!< \deprecated [15:0]  CMSIS HAL sub version */
+#define __ARMv8MML_CMSIS_VERSION       ((__ARMv8MML_CMSIS_VERSION_MAIN << 16U) | \
+                                         __ARMv8MML_CMSIS_VERSION_SUB           )  /*!< \deprecated CMSIS HAL version number */
 
-#define __CORTEX_M                 (33U)                                       /*!< Cortex-M Core */
+#define __CORTEX_M                     (80U)                                       /*!< Cortex-M Core */
 
 /** __FPU_USED indicates whether an FPU is used or not.
     For this, __FPU_PRESENT has to be checked prior to making use of FPU specific registers and functions.
 */
 #if defined ( __CC_ARM )
-  #if defined (__TARGET_FPU_VFP)
+  #if defined __TARGET_FPU_VFP
     #if defined (__FPU_PRESENT) && (__FPU_PRESENT == 1U)
       #define __FPU_USED       1U
     #else
@@ -87,8 +87,8 @@
     #define __FPU_USED         0U
   #endif
 
-  #if defined (__ARM_FEATURE_DSP) && (__ARM_FEATURE_DSP == 1U)
-    #if defined (__DSP_PRESENT) && (__DSP_PRESENT == 1U)
+  #if defined(__ARM_FEATURE_DSP)
+    #if defined(__DSP_PRESENT) && (__DSP_PRESENT == 1U)
       #define __DSP_USED       1U
     #else
       #error "Compiler generates DSP (SIMD) instructions for a devices without DSP extensions (check __DSP_PRESENT)"
@@ -99,7 +99,7 @@
   #endif
 
 #elif defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
-  #if defined (__ARM_FP)
+  #if defined __ARM_FP
     #if defined (__FPU_PRESENT) && (__FPU_PRESENT == 1U)
       #define __FPU_USED       1U
     #else
@@ -110,8 +110,8 @@
     #define __FPU_USED         0U
   #endif
 
-  #if defined (__ARM_FEATURE_DSP) && (__ARM_FEATURE_DSP == 1U)
-    #if defined (__DSP_PRESENT) && (__DSP_PRESENT == 1U)
+  #if defined(__ARM_FEATURE_DSP)
+    #if defined(__DSP_PRESENT) && (__DSP_PRESENT == 1U)
       #define __DSP_USED       1U
     #else
       #error "Compiler generates DSP (SIMD) instructions for a devices without DSP extensions (check __DSP_PRESENT)"
@@ -133,8 +133,8 @@
     #define __FPU_USED         0U
   #endif
 
-  #if defined (__ARM_FEATURE_DSP) && (__ARM_FEATURE_DSP == 1U)
-    #if defined (__DSP_PRESENT) && (__DSP_PRESENT == 1U)
+  #if defined(__ARM_FEATURE_DSP)
+    #if defined(__DSP_PRESENT) && (__DSP_PRESENT == 1U)
       #define __DSP_USED       1U
     #else
       #error "Compiler generates DSP (SIMD) instructions for a devices without DSP extensions (check __DSP_PRESENT)"
@@ -145,7 +145,7 @@
   #endif
 
 #elif defined ( __ICCARM__ )
-  #if defined (__ARMVFP__)
+  #if defined __ARMVFP__
     #if defined (__FPU_PRESENT) && (__FPU_PRESENT == 1U)
       #define __FPU_USED       1U
     #else
@@ -156,8 +156,8 @@
     #define __FPU_USED         0U
   #endif
 
-  #if defined (__ARM_FEATURE_DSP) && (__ARM_FEATURE_DSP == 1U)
-    #if defined (__DSP_PRESENT) && (__DSP_PRESENT == 1U)
+  #if defined(__ARM_FEATURE_DSP)
+    #if defined(__DSP_PRESENT) && (__DSP_PRESENT == 1U)
       #define __DSP_USED       1U
     #else
       #error "Compiler generates DSP (SIMD) instructions for a devices without DSP extensions (check __DSP_PRESENT)"
@@ -168,7 +168,7 @@
   #endif
 
 #elif defined ( __TI_ARM__ )
-  #if defined (__TI_VFP_SUPPORT__)
+  #if defined __TI_VFP_SUPPORT__
     #if defined (__FPU_PRESENT) && (__FPU_PRESENT == 1U)
       #define __FPU_USED       1U
     #else
@@ -180,7 +180,7 @@
   #endif
 
 #elif defined ( __TASKING__ )
-  #if defined (__FPU_VFP__)
+  #if defined __FPU_VFP__
     #if defined (__FPU_PRESENT) && (__FPU_PRESENT == 1U)
       #define __FPU_USED       1U
     #else
@@ -212,12 +212,12 @@
 }
 #endif
 
-#endif /* __CORE_CM33_H_GENERIC */
+#endif /* __CORE_ARMV8MML_H_GENERIC */
 
 #ifndef __CMSIS_GENERIC
 
-#ifndef __CORE_CM33_H_DEPENDANT
-#define __CORE_CM33_H_DEPENDANT
+#ifndef __CORE_ARMV8MML_H_DEPENDANT
+#define __CORE_ARMV8MML_H_DEPENDANT
 
 #ifdef __cplusplus
  extern "C" {
@@ -225,9 +225,9 @@
 
 /* check device defines and use defaults */
 #if defined __CHECK_DEVICE_DEFINES
-  #ifndef __CM33_REV
-    #define __CM33_REV                0x0000U
-    #warning "__CM33_REV not defined in device header file; using default!"
+  #ifndef __ARMv8MML_REV
+    #define __ARMv8MML_REV               0x0000U
+    #warning "__ARMv8MML_REV not defined in device header file; using default!"
   #endif
 
   #ifndef __FPU_PRESENT
@@ -287,7 +287,7 @@
 #define     __OM     volatile            /*! Defines 'write only' structure member permissions */
 #define     __IOM    volatile            /*! Defines 'read / write' structure member permissions */
 
-/*@} end of group Cortex_M33 */
+/*@} end of group ARMv8MML */
 
 
 
@@ -1058,7 +1058,7 @@ typedef struct
 
 /* ITM Trace Privilege Register Definitions */
 #define ITM_TPR_PRIVMASK_Pos                0U                                            /*!< ITM TPR: PRIVMASK Position */
-#define ITM_TPR_PRIVMASK_Msk               (0xFFFFFFFFUL /*<< ITM_TPR_PRIVMASK_Pos*/)     /*!< ITM TPR: PRIVMASK Mask */
+#define ITM_TPR_PRIVMASK_Msk               (0xFUL /*<< ITM_TPR_PRIVMASK_Pos*/)            /*!< ITM TPR: PRIVMASK Mask */
 
 /* ITM Trace Control Register Definitions */
 #define ITM_TCR_BUSY_Pos                   23U                                            /*!< ITM TCR: BUSY Position */
@@ -1302,8 +1302,8 @@ typedef struct
  */
 typedef struct
 {
-  __IM  uint32_t SSPSR;                  /*!< Offset: 0x000 (R/ )  Supported Parallel Port Size Register */
-  __IOM uint32_t CSPSR;                  /*!< Offset: 0x004 (R/W)  Current Parallel Port Size Register */
+  __IM  uint32_t SSPSR;                  /*!< Offset: 0x000 (R/ )  Supported Parallel Port Sizes Register */
+  __IOM uint32_t CSPSR;                  /*!< Offset: 0x004 (R/W)  Current Parallel Port Sizes Register */
         uint32_t RESERVED0[2U];
   __IOM uint32_t ACPR;                   /*!< Offset: 0x010 (R/W)  Asynchronous Clock Prescaler Register */
         uint32_t RESERVED1[55U];
@@ -1312,25 +1312,17 @@ typedef struct
   __IM  uint32_t FFSR;                   /*!< Offset: 0x300 (R/ )  Formatter and Flush Status Register */
   __IOM uint32_t FFCR;                   /*!< Offset: 0x304 (R/W)  Formatter and Flush Control Register */
   __IOM uint32_t PSCR;                   /*!< Offset: 0x308 (R/W)  Periodic Synchronization Control Register */
-        uint32_t RESERVED3[759U];
-  __IM  uint32_t TRIGGER;                /*!< Offset: 0xEE8 (R/ )  TRIGGER Register */
-  __IM  uint32_t ITFTTD0;                /*!< Offset: 0xEEC (R/ )  Integration Test FIFO Test Data 0 Register */
-  __IOM uint32_t ITATBCTR2;              /*!< Offset: 0xEF0 (R/W)  Integration Test ATB Control Register 2 */
-        uint32_t RESERVED4[1U];
-  __IM  uint32_t ITATBCTR0;              /*!< Offset: 0xEF8 (R/ )  Integration Test ATB Control Register 0 */
-  __IM  uint32_t ITFTTD1;                /*!< Offset: 0xEFC (R/ )  Integration Test FIFO Test Data 1 Register */
-  __IOM uint32_t ITCTRL;                 /*!< Offset: 0xF00 (R/W)  Integration Mode Control */
-        uint32_t RESERVED5[39U];
-  __IOM uint32_t CLAIMSET;               /*!< Offset: 0xFA0 (R/W)  Claim tag set */
-  __IOM uint32_t CLAIMCLR;               /*!< Offset: 0xFA4 (R/W)  Claim tag clear */
-        uint32_t RESERVED7[8U];
-  __IM  uint32_t DEVID;                  /*!< Offset: 0xFC8 (R/ )  Device Configuration Register */
-  __IM  uint32_t DEVTYPE;                /*!< Offset: 0xFCC (R/ )  Device Type Identifier Register */
+        uint32_t RESERVED3[809U];
+  __OM  uint32_t LAR;                    /*!< Offset: 0xFB0 ( /W)  Software Lock Access Register */
+  __IM  uint32_t LSR;                    /*!< Offset: 0xFB4 (R/ )  Software Lock Status Register */
+        uint32_t RESERVED4[4U];
+  __IM  uint32_t TYPE;                   /*!< Offset: 0xFC8 (R/ )  Device Identifier Register */
+  __IM  uint32_t DEVTYPE;                /*!< Offset: 0xFCC (R/ )  Device Type Register */
 } TPI_Type;
 
 /* TPI Asynchronous Clock Prescaler Register Definitions */
-#define TPI_ACPR_PRESCALER_Pos              0U                                         /*!< TPI ACPR: PRESCALER Position */
-#define TPI_ACPR_PRESCALER_Msk             (0x1FFFUL /*<< TPI_ACPR_PRESCALER_Pos*/)    /*!< TPI ACPR: PRESCALER Mask */
+#define TPI_ACPR_SWOSCALER_Pos              0U                                         /*!< TPI ACPR: SWOSCALER Position */
+#define TPI_ACPR_SWOSCALER_Msk             (0xFFFFUL /*<< TPI_ACPR_SWOSCALER_Pos*/)    /*!< TPI ACPR: SWOSCALER Mask */
 
 /* TPI Selected Pin Protocol Register Definitions */
 #define TPI_SPPR_TXMODE_Pos                 0U                                         /*!< TPI SPPR: TXMODE Position */
@@ -1359,83 +1351,19 @@ typedef struct
 #define TPI_FFCR_EnFCont_Pos                1U                                         /*!< TPI FFCR: EnFCont Position */
 #define TPI_FFCR_EnFCont_Msk               (0x1UL << TPI_FFCR_EnFCont_Pos)             /*!< TPI FFCR: EnFCont Mask */
 
-/* TPI TRIGGER Register Definitions */
-#define TPI_TRIGGER_TRIGGER_Pos             0U                                         /*!< TPI TRIGGER: TRIGGER Position */
-#define TPI_TRIGGER_TRIGGER_Msk            (0x1UL /*<< TPI_TRIGGER_TRIGGER_Pos*/)      /*!< TPI TRIGGER: TRIGGER Mask */
+/* TPI Periodic Synchronization Control Register Definitions */
+#define TPI_PSCR_PSCount_Pos                0U                                         /*!< TPI PSCR: PSCount Position */
+#define TPI_PSCR_PSCount_Msk               (0x1FUL /*<< TPI_PSCR_PSCount_Pos*/)        /*!< TPI PSCR: TPSCount Mask */
 
-/* TPI Integration Test FIFO Test Data 0 Register Definitions */
-#define TPI_ITFTTD0_ATB_IF2_ATVALID_Pos    29U                                         /*!< TPI ITFTTD0: ATB Interface 2 ATVALIDPosition */
-#define TPI_ITFTTD0_ATB_IF2_ATVALID_Msk    (0x3UL << TPI_ITFTTD0_ATB_IF2_ATVALID_Pos)  /*!< TPI ITFTTD0: ATB Interface 2 ATVALID Mask */
+/* TPI Software Lock Status Register Definitions */
+#define TPI_LSR_nTT_Pos                     1U                                         /*!< TPI LSR: Not thirty-two bit. Position */
+#define TPI_LSR_nTT_Msk                    (0x1UL << TPI_LSR_nTT_Pos)                  /*!< TPI LSR: Not thirty-two bit. Mask */
 
-#define TPI_ITFTTD0_ATB_IF2_bytecount_Pos  27U                                         /*!< TPI ITFTTD0: ATB Interface 2 byte count Position */
-#define TPI_ITFTTD0_ATB_IF2_bytecount_Msk  (0x3UL << TPI_ITFTTD0_ATB_IF2_bytecount_Pos) /*!< TPI ITFTTD0: ATB Interface 2 byte count Mask */
+#define TPI_LSR_SLK_Pos                     1U                                         /*!< TPI LSR: Software Lock status Position */
+#define TPI_LSR_SLK_Msk                    (0x1UL << TPI_LSR_SLK_Pos)                  /*!< TPI LSR: Software Lock status Mask */
 
-#define TPI_ITFTTD0_ATB_IF1_ATVALID_Pos    26U                                         /*!< TPI ITFTTD0: ATB Interface 1 ATVALID Position */
-#define TPI_ITFTTD0_ATB_IF1_ATVALID_Msk    (0x3UL << TPI_ITFTTD0_ATB_IF1_ATVALID_Pos)  /*!< TPI ITFTTD0: ATB Interface 1 ATVALID Mask */
-
-#define TPI_ITFTTD0_ATB_IF1_bytecount_Pos  24U                                         /*!< TPI ITFTTD0: ATB Interface 1 byte count Position */
-#define TPI_ITFTTD0_ATB_IF1_bytecount_Msk  (0x3UL << TPI_ITFTTD0_ATB_IF1_bytecount_Pos) /*!< TPI ITFTTD0: ATB Interface 1 byte countt Mask */
-
-#define TPI_ITFTTD0_ATB_IF1_data2_Pos      16U                                         /*!< TPI ITFTTD0: ATB Interface 1 data2 Position */
-#define TPI_ITFTTD0_ATB_IF1_data2_Msk      (0xFFUL << TPI_ITFTTD0_ATB_IF1_data1_Pos)   /*!< TPI ITFTTD0: ATB Interface 1 data2 Mask */
-
-#define TPI_ITFTTD0_ATB_IF1_data1_Pos       8U                                         /*!< TPI ITFTTD0: ATB Interface 1 data1 Position */
-#define TPI_ITFTTD0_ATB_IF1_data1_Msk      (0xFFUL << TPI_ITFTTD0_ATB_IF1_data1_Pos)   /*!< TPI ITFTTD0: ATB Interface 1 data1 Mask */
-
-#define TPI_ITFTTD0_ATB_IF1_data0_Pos       0U                                          /*!< TPI ITFTTD0: ATB Interface 1 data0 Position */
-#define TPI_ITFTTD0_ATB_IF1_data0_Msk      (0xFFUL /*<< TPI_ITFTTD0_ATB_IF1_data0_Pos*/) /*!< TPI ITFTTD0: ATB Interface 1 data0 Mask */
-
-/* TPI Integration Test ATB Control Register 2 Register Definitions */
-#define TPI_ITATBCTR2_AFVALID2S_Pos         1U                                         /*!< TPI ITATBCTR2: AFVALID2S Position */
-#define TPI_ITATBCTR2_AFVALID2S_Msk        (0x1UL << TPI_ITATBCTR2_AFVALID2S_Pos)      /*!< TPI ITATBCTR2: AFVALID2SS Mask */
-
-#define TPI_ITATBCTR2_AFVALID1S_Pos         1U                                         /*!< TPI ITATBCTR2: AFVALID1S Position */
-#define TPI_ITATBCTR2_AFVALID1S_Msk        (0x1UL << TPI_ITATBCTR2_AFVALID1S_Pos)      /*!< TPI ITATBCTR2: AFVALID1SS Mask */
-
-#define TPI_ITATBCTR2_ATREADY2S_Pos         0U                                         /*!< TPI ITATBCTR2: ATREADY2S Position */
-#define TPI_ITATBCTR2_ATREADY2S_Msk        (0x1UL /*<< TPI_ITATBCTR2_ATREADY2S_Pos*/)  /*!< TPI ITATBCTR2: ATREADY2S Mask */
-
-#define TPI_ITATBCTR2_ATREADY1S_Pos         0U                                         /*!< TPI ITATBCTR2: ATREADY1S Position */
-#define TPI_ITATBCTR2_ATREADY1S_Msk        (0x1UL /*<< TPI_ITATBCTR2_ATREADY1S_Pos*/)  /*!< TPI ITATBCTR2: ATREADY1S Mask */
-
-/* TPI Integration Test FIFO Test Data 1 Register Definitions */
-#define TPI_ITFTTD1_ATB_IF2_ATVALID_Pos    29U                                         /*!< TPI ITFTTD1: ATB Interface 2 ATVALID Position */
-#define TPI_ITFTTD1_ATB_IF2_ATVALID_Msk    (0x3UL << TPI_ITFTTD1_ATB_IF2_ATVALID_Pos)  /*!< TPI ITFTTD1: ATB Interface 2 ATVALID Mask */
-
-#define TPI_ITFTTD1_ATB_IF2_bytecount_Pos  27U                                         /*!< TPI ITFTTD1: ATB Interface 2 byte count Position */
-#define TPI_ITFTTD1_ATB_IF2_bytecount_Msk  (0x3UL << TPI_ITFTTD1_ATB_IF2_bytecount_Pos) /*!< TPI ITFTTD1: ATB Interface 2 byte count Mask */
-
-#define TPI_ITFTTD1_ATB_IF1_ATVALID_Pos    26U                                         /*!< TPI ITFTTD1: ATB Interface 1 ATVALID Position */
-#define TPI_ITFTTD1_ATB_IF1_ATVALID_Msk    (0x3UL << TPI_ITFTTD1_ATB_IF1_ATVALID_Pos)  /*!< TPI ITFTTD1: ATB Interface 1 ATVALID Mask */
-
-#define TPI_ITFTTD1_ATB_IF1_bytecount_Pos  24U                                         /*!< TPI ITFTTD1: ATB Interface 1 byte count Position */
-#define TPI_ITFTTD1_ATB_IF1_bytecount_Msk  (0x3UL << TPI_ITFTTD1_ATB_IF1_bytecount_Pos) /*!< TPI ITFTTD1: ATB Interface 1 byte countt Mask */
-
-#define TPI_ITFTTD1_ATB_IF2_data2_Pos      16U                                         /*!< TPI ITFTTD1: ATB Interface 2 data2 Position */
-#define TPI_ITFTTD1_ATB_IF2_data2_Msk      (0xFFUL << TPI_ITFTTD1_ATB_IF2_data1_Pos)   /*!< TPI ITFTTD1: ATB Interface 2 data2 Mask */
-
-#define TPI_ITFTTD1_ATB_IF2_data1_Pos       8U                                         /*!< TPI ITFTTD1: ATB Interface 2 data1 Position */
-#define TPI_ITFTTD1_ATB_IF2_data1_Msk      (0xFFUL << TPI_ITFTTD1_ATB_IF2_data1_Pos)   /*!< TPI ITFTTD1: ATB Interface 2 data1 Mask */
-
-#define TPI_ITFTTD1_ATB_IF2_data0_Pos       0U                                          /*!< TPI ITFTTD1: ATB Interface 2 data0 Position */
-#define TPI_ITFTTD1_ATB_IF2_data0_Msk      (0xFFUL /*<< TPI_ITFTTD1_ATB_IF2_data0_Pos*/) /*!< TPI ITFTTD1: ATB Interface 2 data0 Mask */
-
-/* TPI Integration Test ATB Control Register 0 Definitions */
-#define TPI_ITATBCTR0_AFVALID2S_Pos         1U                                         /*!< TPI ITATBCTR0: AFVALID2S Position */
-#define TPI_ITATBCTR0_AFVALID2S_Msk        (0x1UL << TPI_ITATBCTR0_AFVALID2S_Pos)      /*!< TPI ITATBCTR0: AFVALID2SS Mask */
-
-#define TPI_ITATBCTR0_AFVALID1S_Pos         1U                                         /*!< TPI ITATBCTR0: AFVALID1S Position */
-#define TPI_ITATBCTR0_AFVALID1S_Msk        (0x1UL << TPI_ITATBCTR0_AFVALID1S_Pos)      /*!< TPI ITATBCTR0: AFVALID1SS Mask */
-
-#define TPI_ITATBCTR0_ATREADY2S_Pos         0U                                         /*!< TPI ITATBCTR0: ATREADY2S Position */
-#define TPI_ITATBCTR0_ATREADY2S_Msk        (0x1UL /*<< TPI_ITATBCTR0_ATREADY2S_Pos*/)  /*!< TPI ITATBCTR0: ATREADY2S Mask */
-
-#define TPI_ITATBCTR0_ATREADY1S_Pos         0U                                         /*!< TPI ITATBCTR0: ATREADY1S Position */
-#define TPI_ITATBCTR0_ATREADY1S_Msk        (0x1UL /*<< TPI_ITATBCTR0_ATREADY1S_Pos*/)  /*!< TPI ITATBCTR0: ATREADY1S Mask */
-
-/* TPI Integration Mode Control Register Definitions */
-#define TPI_ITCTRL_Mode_Pos                 0U                                         /*!< TPI ITCTRL: Mode Position */
-#define TPI_ITCTRL_Mode_Msk                (0x3UL /*<< TPI_ITCTRL_Mode_Pos*/)          /*!< TPI ITCTRL: Mode Mask */
+#define TPI_LSR_SLI_Pos                     0U                                         /*!< TPI LSR: Software Lock implemented Position */
+#define TPI_LSR_SLI_Msk                    (0x1UL /*<< TPI_LSR_SLI_Pos*/)              /*!< TPI LSR: Software Lock implemented Mask */
 
 /* TPI DEVID Register Definitions */
 #define TPI_DEVID_NRZVALID_Pos             11U                                         /*!< TPI DEVID: NRZVALID Position */
@@ -1447,11 +1375,8 @@ typedef struct
 #define TPI_DEVID_PTINVALID_Pos             9U                                         /*!< TPI DEVID: PTINVALID Position */
 #define TPI_DEVID_PTINVALID_Msk            (0x1UL << TPI_DEVID_PTINVALID_Pos)          /*!< TPI DEVID: PTINVALID Mask */
 
-#define TPI_DEVID_FIFOSZ_Pos                6U                                         /*!< TPI DEVID: FIFOSZ Position */
-#define TPI_DEVID_FIFOSZ_Msk               (0x7UL << TPI_DEVID_FIFOSZ_Pos)             /*!< TPI DEVID: FIFOSZ Mask */
-
-#define TPI_DEVID_NrTraceInput_Pos          0U                                         /*!< TPI DEVID: NrTraceInput Position */
-#define TPI_DEVID_NrTraceInput_Msk         (0x3FUL /*<< TPI_DEVID_NrTraceInput_Pos*/)  /*!< TPI DEVID: NrTraceInput Mask */
+#define TPI_DEVID_FIFOSZ_Pos                6U                                         /*!< TPI DEVID: FIFO depth Position */
+#define TPI_DEVID_FIFOSZ_Msk               (0x7UL << TPI_DEVID_FIFOSZ_Pos)             /*!< TPI DEVID: FIFO depth Mask */
 
 /* TPI DEVTYPE Register Definitions */
 #define TPI_DEVTYPE_SubType_Pos             4U                                         /*!< TPI DEVTYPE: SubType Position */
@@ -2738,11 +2663,11 @@ __STATIC_INLINE void TZ_NVIC_SetPriorityGrouping_NS(uint32_t PriorityGroup)
   uint32_t reg_value;
   uint32_t PriorityGroupTmp = (PriorityGroup & (uint32_t)0x07UL);             /* only values 0..7 are used          */
 
-  reg_value  =  SCB_NS->AIRCR;                                                /* read old register configuration    */
-  reg_value &= ~((uint32_t)(SCB_AIRCR_VECTKEY_Msk | SCB_AIRCR_PRIGROUP_Msk)); /* clear bits to change               */
+  reg_value  =  SCB_NS->AIRCR;                                                   /* read old register configuration    */
+  reg_value &= ~((uint32_t)(SCB_AIRCR_VECTKEY_Msk | SCB_AIRCR_PRIGROUP_Msk));             /* clear bits to change               */
   reg_value  =  (reg_value                                   |
                 ((uint32_t)0x5FAUL << SCB_AIRCR_VECTKEY_Pos) |
-                (PriorityGroupTmp << SCB_AIRCR_PRIGROUP_Pos)  );              /* Insert write key and priority group */
+                (PriorityGroupTmp << SCB_AIRCR_PRIGROUP_Pos)                      );              /* Insert write key and priority group */
   SCB_NS->AIRCR =  reg_value;
 }
 
@@ -2973,6 +2898,13 @@ __STATIC_INLINE uint32_t SCB_GetFPUType(void)
 
 /*@} end of CMSIS_Core_FpuFunctions */
 
+
+/* ##########################  Cache functions  #################################### */
+
+#if ((defined (__ICACHE_PRESENT) && (__ICACHE_PRESENT == 1U)) || \
+     (defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)))
+#include "cachel1_armv7.h"
+#endif
 
 
 /* ##########################   SAU functions  #################################### */
@@ -3272,6 +3204,6 @@ __STATIC_INLINE int32_t ITM_CheckChar (void)
 }
 #endif
 
-#endif /* __CORE_CM33_H_DEPENDANT */
+#endif /* __CORE_ARMV8MML_H_DEPENDANT */
 
 #endif /* __CMSIS_GENERIC */
