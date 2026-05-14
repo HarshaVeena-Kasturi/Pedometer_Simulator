@@ -6,6 +6,10 @@ This project implements a **pedometer (step-counting system)** on an STM32 micro
 
 The system demonstrates **embedded firmware design, real-time processing, and event detection**, making it relevant for wearable devices and fitness tracking applications.
 
+<p align="center">
+  <img src="./Files/pedometer.png" alt="Pedometer Simulator" width="1000">
+</p>
+
 ---
 
 ## ⚙️ Key Features
